@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About GLASS - Global Lightweight And Secure Sharing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .about-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .about-header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .project-acronym {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+
+        .project-tagline {
+            font-size: 1.1em;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .about-content {
+            padding: 60px 40px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .developer-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .developer-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .developer-info {
+            font-size: 1.1em;
+            opacity: 0.95;
+            line-height: 1.8;
+        }
+
+        .tech-stack {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+
+        .tech-stack h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .tech-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tech-item {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            color: #333;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .back-button:hover {
+            background: #764ba2;
+        }
+
+        @media (max-width: 768px) {
+            .about-header h1 {
+                font-size: 2em;
+            }
+
+            .about-header,
+            .about-content {
+                padding: 30px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="about-container">
+        <!-- Header -->
+        <div class="about-header">
+            <h1>🌐 GLASS</h1>
+            <div class="project-acronym">
+                <strong>Global Lightweight And Secure Sharing</strong>
+            </div>
+            <div class="project-tagline">
+                A modern file storage and sharing platform
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="about-content">
+            <a href="{{ url_for('index') }}" class="back-button">← Back to Home</a>
+
+            <!-- About Section -->
+            <h2 class="section-title">📖 About This Project</h2>
+            <p style="font-size: 1.1em; color: #555; line-height: 1.8; margin-bottom: 40px;">
+                GLASS is a comprehensive web-based file storage and sharing system designed for final-year 
+                BCA students and professionals. It provides a secure, lightweight solution for uploading, 
+                organizing, and sharing files with others through time-limited share links.
+            </p>
+
+            <!-- Features Section -->
+            <h2 class="section-title">✨ Key Features</h2>
+            <div class="features-grid">
+                {% for feature in features %}
+                <div class="feature-card">
+                    <div class="feature-icon">{{ feature.icon }}</div>
+                    <div class="feature-title">{{ feature.title }}</div>
+                    <div class="feature-description">{{ feature.description }}</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Developer Section -->
+            <div class="developer-section">
+                <h3>👨‍💻 Developer Information</h3>
+                <div class="developer-info">
+                    <strong>Project Name:</strong> GLASS (Global Lightweight And Secure Sharing)<br>
+                    <strong>Developer:</strong> Parth Nautiyal<br>
+                    <strong>Course:</strong> BCA - Final Year (3rd Year)<br>
+                    <strong>Project Type:</strong> Web Application<br>
+                    <strong>Last Updated:</strong> March 2026
+                </div>
+            </div>
+
+            <!-- Technology Stack Section -->
+            <div class="tech-stack">
+                <h3>🛠️ Technology Stack</h3>
+                <div class="tech-list">
+                    <div class="tech-item">Python 3.9+</div>
+                    <div class="tech-item">Flask 2.3.3</div>
+                    <div class="tech-item">SQLAlchemy 3.0</div>
+                    <div class="tech-item">SQLite Database</div>
+                    <div class="tech-item">HTML5</div>
+                    <div class="tech-item">CSS3</div>
+                    <div class="tech-item">JavaScript</div>
+                    <div class="tech-item">Werkzeug Security</div>
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <a href="{{ url_for('index') }}" class="back-button">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

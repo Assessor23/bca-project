@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Statistics - File Storage System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .stat-box {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid var(--primary);
+    }
+
+    .stat-box h3 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+        font-size: 1.2em;
+        border: none;
+        padding: 0;
+    }
+
+    .stat-box .value {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: var(--dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-box .label {
+        color: var(--gray);
+        font-size: 0.95em;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 30px;
+        background: #e9ecef;
+        border-radius: 15px;
+        overflow: hidden;
+        margin-top: 1rem;
+        border: 1px solid #dee2e6;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        transition: width 0.3s ease;
+    }
+
+    .section-divider {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: var(--primary);
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--primary);
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get percentage from data attribute and set width
+    const fillBar = document.getElementById('progress-fill');
+    if (fillBar) {
+        const percentage = fillBar.getAttribute('data-percentage');
+        fillBar.style.width = percentage + '%';
+    }
+    
+    // Update stats time
+    updateStatsTime();
+    setInterval(updateStatsTime, 1000);
+});
+
+function updateStatsTime() {
+    const serverTime = new Date("{{ site_stats.last_updated.isoformat() }}Z");
+    const hours = String(serverTime.getHours()).padStart(2, '0');
+    const minutes = String(serverTime.getMinutes()).padStart(2, '0');
+    const seconds = String(serverTime.getSeconds()).padStart(2, '0');
+    const updateTimeEl = document.getElementById('stats-update-time');
+    if (updateTimeEl) {
+        updateTimeEl.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<h2>📊 Statistics</h2>
+
+<!-- SITE ANALYTICS SECTION (from counter.html) -->
+<div class="section-divider">📊 Site Analytics</div>
+
+<div class="stats-grid">
+    <div class="stat-box">
+        <h3>👥 Total Visits</h3>
+        <div class="value">{{ site_stats.total_visits }}</div>
+        <div class="label">+2.5% today</div>
+    </div>
+
+    <div class="stat-box">
+        <h3>👤 Registered Users</h3>
+        <div class="value">{{ site_stats.total_users }}</div>
+        <div class="label">Active users</div>
+    </div>
+
+    <div class="stat-box">
+        <h3>📁 Files Uploaded</h3>
+        <div class="value">{{ site_stats.total_files_uploaded }}</div>
+        <div class="label">System total</div>
+    </div>
+
+    <div class="stat-box">
+        <h3>💾 Total Storage</h3>
+        <div class="value">{{ site_stats.total_storage_used_mb }}<span style="font-size: 0.5em; margin-left: 0.3em;">MB</span></div>
+        <div class="label">All users combined</div>
+    </div>
+
+    <div class="stat-box">
+        <h3>⏱️ Last Update</h3>
+        <div style="margin-top: 1rem; font-size: 2em; font-weight: bold; color: var(--primary);">
+            <span class="update-time" id="stats-update-time">00:00:00</span>
+        </div>
+    </div>
+</div>
+
+<!-- USER ACCOUNT SECTION (from stats.html) -->
+<div class="section-divider">💾 Your Account</div>
+
+{% set percentage = (user_storage_mb / 500 * 100) | int %}
+
+<div class="stats-grid">
+    <div class="stat-box">
+        <h3>👤 Account</h3>
+        <p><strong>Username:</strong> {{ current_user.username }}</p>
+        <p><strong>Email:</strong> {{ current_user.email }}</p>
+        <p><strong>Member Since:</strong> {{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+    </div>
+
+    <div class="stat-box">
+        <h3>💾 Storage</h3>
+        <div class="value">{{ user_storage_mb }} MB</div>
+        <div class="label">Used out of 500 MB</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" data-percentage="{{ percentage }}">
+                {{ percentage }}%
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-box">
+        <h3>📂 Files</h3>
+        <div class="value">{{ file_count }}</div>
+        <div class="label">Total files</div>
+    </div>
+
+    <div class="stat-box">
+        <h3>🖥️ Server</h3>
+        <p><strong>Total Storage:</strong> {{ total_storage_mb }} MB</p>
+        <p><strong>Your Quota:</strong> 500 MB</p>
+    </div>
+</div>
+
+<div style="margin-top: 2rem; text-align: center;">
+    <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary">← Back to Dashboard</a>
+</div>
+{% endblock %}
